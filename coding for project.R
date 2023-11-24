@@ -1,6 +1,7 @@
 # Load necessary libraries
 library(ggplot2)
 library(reshape2)
+library(tidyr)
 
 # Set seed for reproducibility
 set.seed(123)
@@ -71,6 +72,8 @@ ggplot(plot_data, aes(x = LinearPredictor, y = FittedProbability)) +
   labs(title = 'Fitted Logistic Curve', x = expression(X %*% hat(beta)), y = 'Predicted Probability') +
   theme_minimal()
 
+# [Previous code for data generation, logistic regression function, and plotting...]
+
 # Metrics Across Cutoffs
 calculate_metrics <- function(conf_matrix) {
   TP <- conf_matrix[2, 2]
@@ -85,7 +88,8 @@ calculate_metrics <- function(conf_matrix) {
   FDR <- FP / (FP + TP)
   DOR <- ifelse(FP == 0 | FN == 0, NA, (TP / FP) / (FN / TN))
   
-  return(c(Accuracy, Sensitivity, Specificity, Prevalence, FDR, DOR))
+  return(list(Accuracy = Accuracy, Sensitivity = Sensitivity, Specificity = Specificity, 
+              Prevalence = Prevalence, FDR = FDR, DOR = DOR))
 }
 
 evaluate_metrics_across_cutoffs <- function(X, y, predicted_probs) {
@@ -104,15 +108,17 @@ evaluate_metrics_across_cutoffs <- function(X, y, predicted_probs) {
 metrics_across_cutoffs <- evaluate_metrics_across_cutoffs(X_scaled, y, predicted_probs)
 
 # Convert list to data frame for plotting
-# Convert the list of metrics into a data frame
 metrics_df <- do.call(rbind, metrics_across_cutoffs)
 metrics_df <- as.data.frame(metrics_df)
 colnames(metrics_df) <- c("Accuracy", "Sensitivity", "Specificity", "Prevalence", "FDR", "DOR")
 metrics_df$Cutoff <- as.numeric(rownames(metrics_df))
 
 # Reshaping the data frame for ggplot
-library(tidyr)
 metrics_long <- pivot_longer(metrics_df, cols = -Cutoff, names_to = "Metric", values_to = "Value")
+
+# Ensure Cutoff and Value are numeric
+metrics_long$Cutoff <- as.numeric(metrics_long$Cutoff)
+metrics_long$Value <- as.numeric(metrics_long$Value)
 
 # Plotting the Metrics Across Cutoffs
 ggplot(metrics_long, aes(x = Cutoff, y = Value, color = Metric)) +
@@ -123,6 +129,17 @@ ggplot(metrics_long, aes(x = Cutoff, y = Value, color = Metric)) +
   theme_minimal() +
   scale_color_brewer(palette = "Set1") +
   guides(color = guide_legend(title = "Metrics"))
+
+# [Previous code for data generation, logistic regression function, plotting, and metric evaluation...]
+
+# Display Metrics for Each Cutoff
+for (cutoff in seq(0.1, 0.9, by = 0.1)) {
+  cat("Metrics for cutoff", cutoff, ":\n")
+  print(metrics_across_cutoffs[[as.character(cutoff)]])
+  cat("\n")
+}
+
+
 
 # Ref: https://chat.openai.com/share/6282c9b6-5ee4-4cbc-8f6e-08a5c9d01034
   
