@@ -87,39 +87,47 @@ calculate_metrics <- function(actual, predicted_probabilities, cutoff = 0.5) {
   return(metrics)
 }
 
+
 # Function to plot metrics over various cutoff values
-plot_metrics_over_cutoff <- function(y, predicted_probabilities,
-                                     prevalence = FALSE, accuracy = FALSE, sensitivity = FALSE,
-                                     specificity = FALSE, fdr = FALSE, dor = FALSE) {
+plot_metrics_over_cutoff <- function(y, predicted_probabilities, 
+                                     plot_prevalence = FALSE, plot_accuracy = TRUE, 
+                                     plot_sensitivity = TRUE, plot_specificity = TRUE, 
+                                     plot_fdr = FALSE) {
   cutoffs <- seq(0.1, 0.9, by = 0.1)
-  confusion_vector <- rep(NA, 6)
-  ifelse(prevalence == TRUE, confusion_vector[1] <- metrics$prevalence, confusion_vector[1] <- NA)
-  ifelse(accuracy == TRUE, confusion_vector[2] <- metrics$accuracy, confusion_vector[2] <- NA)
-  ifelse(sensitivity == TRUE, confusion_vector[3] <- metrics$sensitivity, confusion_vector[3] <- NA)
-  ifelse(specificity == TRUE, confusion_vector[4] <- metrics$specificity, confusion_vector[4] <- NA)
-  ifelse(fdr == TRUE, confusion_vector[5] <- metrics$false_discovery_rate, confusion_vector[5] <- NA)
-  ifelse(dor == TRUE, confusion_vector[6] <- metrics$diagnostic_odds_ratio, confusion_vector[6] <- NA)
-  for (i in 1:6) {
-    ifelse(is.na(confusion_vector[i]), confusion_vector[-i], confusion_vector[i])
-  }
-  metrics_data <- sapply(cutoffs, function(cutoff) {
-    metrics <- calculate_metrics(y, predicted_probabilities, cutoff)
-    c(metrics$accuracy, metrics$sensitivity, metrics$specificity, metrics$prevalence)
+  metrics_list <- lapply(cutoffs, function(cutoff) {
+    calculate_metrics(y, predicted_probabilities, cutoff)
   })
   
-  # Convert the metrics data to a data frame for plotting
-  metrics_df <- as.data.frame(t(metrics_data))
-  names(metrics_df) <- c("Accuracy", "Sensitivity", "Specificity", "Prevalance")
-  metrics_df$Cutoff <- cutoffs
+  metrics_df <- do.call(rbind, lapply(1:length(metrics_list), function(i) {
+    data.frame(
+      Cutoff = cutoffs[i],
+      Prevalence = metrics_list[[i]]$prevalence,
+      Accuracy = metrics_list[[i]]$accuracy,
+      Sensitivity = metrics_list[[i]]$sensitivity,
+      Specificity = metrics_list[[i]]$specificity,
+      FDR = metrics_list[[i]]$false_discovery_rate
+    )
+  }))
   
-  # Plot using ggplot2
-  long_metrics_df <- reshape2::melt(metrics_df, id.vars = "Cutoff")
-  ggplot(long_metrics_df, aes(x = Cutoff, y = value, colour = variable)) +
+  # Melting the data for plotting with ggplot2
+  metrics_melted <- melt(metrics_df, id.vars = 'Cutoff')
+  
+  # Filter based on user preference
+  metrics_to_plot <- c('Cutoff')
+  if (plot_prevalence) metrics_to_plot <- c(metrics_to_plot, 'Prevalence')
+  if (plot_accuracy) metrics_to_plot <- c(metrics_to_plot, 'Accuracy')
+  if (plot_sensitivity) metrics_to_plot <- c(metrics_to_plot, 'Sensitivity')
+  if (plot_specificity) metrics_to_plot <- c(metrics_to_plot, 'Specificity')
+  if (plot_fdr) metrics_to_plot <- c(metrics_to_plot, 'FDR')
+  
+  metrics_filtered <- metrics_melted[metrics_melted$variable %in% metrics_to_plot[-1], ]
+  
+  # Plotting
+  ggplot(metrics_filtered, aes(x = Cutoff, y = value, colour = variable)) +
     geom_line() +
     labs(title = "Performance Metrics over Various Cutoffs", x = "Cutoff Value", y = "Metric Value") +
     theme_minimal()
 }
-
 
 
 #Example
@@ -174,13 +182,14 @@ print(paste("Specificity:", metrics$specificity))
 print(paste("False Discovery Rate:", metrics$false_discovery_rate))
 print(paste("Diagnostic Odds Ratio:", metrics$diagnostic_odds_ratio))
 
-# Plotting the metrics over various cutoff values
-plot_metrics_over_cutoff(y, predicted_prob)
-
-
 # Calculate metrics using a cutoff of 0.5
 metrics <- calculate_metrics(y, predicted_prob, cutoff = 0.5)
 print(metrics)
 
+# Plotting the metrics over various cutoff values with user's choice
+plot_metrics_over_cutoff(y, predicted_prob, 
+                         plot_prevalence = FALSE, plot_accuracy = TRUE, 
+                         plot_sensitivity = TRUE, plot_specificity = TRUE, 
+                         plot_fdr = FALSE)
 #Ref: https://chat.openai.com/g/g-zZ3HN933F-r-code-helper/c/bbb01533-affe-48d5-8e44-6cb8138a4a50
 
