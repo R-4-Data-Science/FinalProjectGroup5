@@ -2,18 +2,20 @@
 library(ggplot2)
 library(reshape2)
 
+
+# Logistic probability function
+logistic_probability <- function(beta, X) {
+  1 / (1 + exp(-X %*% beta))
+}
+
+# Loss function for logistic regression
+loss_function <- function(beta, X, y) {
+  p <- logistic_probability(beta, X)
+  -sum(y * log(p) + (1 - y) * log(1 - p))
+}
+
 # Define the logistic regression function
 logistic_regression <- function(X, y) {
-  # Logistic function
-  logistic_function <- function(beta, X) {
-    1 / (1 + exp(-X %*% beta))
-  }
-  
-  # Loss function for logistic regression
-  loss_function <- function(beta, X, y) {
-    p <- logistic_function(beta, X)
-    -sum(y * log(p) + (1 - y) * log(1 - p))
-  }
   
   # Initial estimate using least squares
   initial_beta <- solve(t(X) %*% X) %*% t(X) %*% y
@@ -86,16 +88,28 @@ calculate_metrics <- function(actual, predicted_probabilities, cutoff = 0.5) {
 }
 
 # Function to plot metrics over various cutoff values
-plot_metrics_over_cutoff <- function(y, predicted_probabilities) {
+plot_metrics_over_cutoff <- function(y, predicted_probabilities,
+                                     prevalence = FALSE, accuracy = FALSE, sensitivity = FALSE,
+                                     specificity = FALSE, fdr = FALSE, dor = FALSE) {
   cutoffs <- seq(0.1, 0.9, by = 0.1)
+  confusion_vector <- rep(NA, 6)
+  ifelse(prevalence == TRUE, confusion_vector[1] <- metrics$prevalence, confusion_vector[1] <- NA)
+  ifelse(accuracy == TRUE, confusion_vector[2] <- metrics$accuracy, confusion_vector[2] <- NA)
+  ifelse(sensitivity == TRUE, confusion_vector[3] <- metrics$sensitivity, confusion_vector[3] <- NA)
+  ifelse(specificity == TRUE, confusion_vector[4] <- metrics$specificity, confusion_vector[4] <- NA)
+  ifelse(fdr == TRUE, confusion_vector[5] <- metrics$false_discovery_rate, confusion_vector[5] <- NA)
+  ifelse(dor == TRUE, confusion_vector[6] <- metrics$diagnostic_odds_ratio, confusion_vector[6] <- NA)
+  for (i in 1:6) {
+    ifelse(is.na(confusion_vector[i]), confusion_vector[-i], confusion_vector[i])
+  }
   metrics_data <- sapply(cutoffs, function(cutoff) {
     metrics <- calculate_metrics(y, predicted_probabilities, cutoff)
-    c(metrics$accuracy, metrics$sensitivity, metrics$specificity)
+    c(metrics$accuracy, metrics$sensitivity, metrics$specificity, metrics$prevalence)
   })
   
   # Convert the metrics data to a data frame for plotting
   metrics_df <- as.data.frame(t(metrics_data))
-  names(metrics_df) <- c("Accuracy", "Sensitivity", "Specificity")
+  names(metrics_df) <- c("Accuracy", "Sensitivity", "Specificity", "Prevalance")
   metrics_df$Cutoff <- cutoffs
   
   # Plot using ggplot2
@@ -124,7 +138,7 @@ X <- cbind(rep(1, n), X)
 beta_true <- c(-1, 2, -3, 1)
 
 # Compute logistic probabilities
-logit_probs <- 1 / (1 + exp(-X %*% beta_true))
+logit_probs <- logistic_probability(beta_true, X)
 
 # Generate binary response variable
 y <- rbinom(n, size = 1, prob = logit_probs)
@@ -143,12 +157,12 @@ print(CI)
 plot_logistic_curve(X, y, estimated_beta)
 
 # Logistic function using the estimated coefficients
-logistic_function <- function(beta, X) {
+logistic_probability <- function(beta, X) {
   1 / (1 + exp(-X %*% beta))
 }
 
 # Calculate the predicted probabilities using the estimated coefficients
-predicted_prob <- logistic_function(estimated_beta, X)
+predicted_prob <- logistic_probability(estimated_beta, X)
 
 # Calculate metrics using a cutoff of 0.5
 metrics <- calculate_metrics(y, predicted_prob, cutoff = 0.5)
