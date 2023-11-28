@@ -172,15 +172,7 @@ logistic_probability <- function(beta, X) {
 # Calculate the predicted probabilities using the estimated coefficients
 predicted_prob <- logistic_probability(estimated_beta, X)
 
-# Calculate metrics using a cutoff of 0.5
-metrics <- calculate_metrics(y, predicted_prob, cutoff = 0.5)
-print(metrics$confusion_matrix)
-print(paste("Prevalence:", metrics$prevalence))
-print(paste("Accuracy:", metrics$accuracy))
-print(paste("Sensitivity:", metrics$sensitivity))
-print(paste("Specificity:", metrics$specificity))
-print(paste("False Discovery Rate:", metrics$false_discovery_rate))
-print(paste("Diagnostic Odds Ratio:", metrics$diagnostic_odds_ratio))
+
 
 # Calculate metrics using a cutoff of 0.5
 metrics <- calculate_metrics(y, predicted_prob, cutoff = 0.5)
