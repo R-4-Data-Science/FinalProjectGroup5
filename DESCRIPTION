@@ -3,7 +3,7 @@ Type: Package
 Title: Logistic Regression Through Numerical Optimization
 Version: 0.1.0
 Authors@R: c(
-    person("Ethan", "Sax", email = "ems0157@auburn.edu", role = c("aut","cre"),
+    person("Ethan", "Sax", email = "ems0157@auburn.edu", role = c("aut","cre")),
     person("Nozara", "Sundus", role = "aut"),
     person("Mohammad", "Maydanchi", role = "aut")
     )
