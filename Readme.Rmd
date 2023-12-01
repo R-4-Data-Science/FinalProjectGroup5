@@ -60,14 +60,5 @@ In logistic regression, the coefficients represent the change in the log odds of
 
 
 
-!["Logistic Regression Figure"](/Users/mohammadmaydanchi/Library/CloudStorage/OneDrive-AuburnUniversity/Auburn University/2023-Fall/4-R for Data Science/5-Project/1-Main/1_klFuUpBGVAjTfpTak2HhUA.png)
-
-
-
-
-
-
 This information was created with the assistance of this [link](https://chat.openai.com/share/a531ba79-9803-4e75-ae64-a4c2ca1eaa7f).
 
-
-The reference of the figure is in this [link](https://medium.com/analytics-vidhya/the-math-behind-logistic-regression-c2f04ca27bca).
