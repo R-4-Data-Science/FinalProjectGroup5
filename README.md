@@ -60,6 +60,6 @@ odds of the dependent variable for a one-unit change in the independent
 variable, while other variables are held constant.
 
 
-This information was created with the assistance of this
+This information is created with the assistance of this
 [link](https://chat.openai.com/share/a531ba79-9803-4e75-ae64-a4c2ca1eaa7f).
 
