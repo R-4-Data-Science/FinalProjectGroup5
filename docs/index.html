@@ -65,11 +65,57 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div class="section level1">
-<div class="page-header"><h1 id="add-a-title">Add a title<a class="anchor" aria-label="anchor" href="#add-a-title"></a>
+<div class="page-header"><h1 id="logistic-regression-package">Logistic Regression Package<a class="anchor" aria-label="anchor" href="#logistic-regression-package"></a>
 </h1></div>
-<p>Thsi package provide functions for Logistic Regression.</p>
+<p>This package provides functions of Logistic Regression, which are :</p>
+<ol style="list-style-type: decimal">
+<li><code><a href="reference/bootstrap_CI.html">bootstrap_CI()</a></code></li>
+<li><code><a href="reference/calculate_metrics.html">calculate_metrics()</a></code></li>
+<li><code><a href="reference/logistic_regression.html">logistic_regression()</a></code></li>
+<li><code><a href="reference/plot_logistic_curve.html">plot_logistic_curve()</a></code></li>
+<li><code><a href="reference/plot_metrics_over_cutoff.html">plot_metrics_over_cutoff()</a></code></li>
+</ol>
+<p>Below, we introduce Logistic Regression, covering its purpose, functionality, mathematics, applications, assumptions, and interpretation.</p>
 </div>
+<div class="section level1">
+<h1 id="logistic-regression-overview">Logistic Regression Overview<a class="anchor" aria-label="anchor" href="#logistic-regression-overview"></a>
+</h1>
+<p>Logistic Regression is a statistical method used for binary classification problems. It predicts the probability of an outcome that has two possible values, such as yes/no, win/lose, or alive/dead.</p>
+<div class="section level2">
+<h2 id="functionality-and-purpose">Functionality and Purpose<a class="anchor" aria-label="anchor" href="#functionality-and-purpose"></a>
+</h2>
+<ul>
+<li><p><strong>Purpose</strong>: Logistic regression is used for classification problems, specifically to predict binary outcomes.</p></li>
+<li><p><strong>Functionality</strong>: It uses the logistic (or sigmoid) function to convert the output of a linear equation into a probability between 0 and 1. This probability is the likelihood of the dependent variable being a ‘1’ or ‘success’.</p></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="mathematical-formula">Mathematical Formula<a class="anchor" aria-label="anchor" href="#mathematical-formula"></a>
+</h2>
+<p>The logistic function in logistic regression is defined as:</p>
+<p><span class="math display">$$ P(Y=1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1X)}} $$</span></p>
+<p>Where: - <span class="math inline"><em>P</em>(<em>Y</em>=1)</span> is the probability of the dependent variable equaling ‘1’. - <span class="math inline"><em>e</em></span> is the base of natural logarithm. - <span class="math inline"><em>β</em><sub>0</sub></span> and <span class="math inline"><em>β</em><sub>1</sub></span> are the coefficients of the model.</p>
+</div>
+<div class="section level2">
+<h2 id="applications">Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
+</h2>
+<p>Logistic regression is widely used in fields like medicine, social sciences, and machine learning for solving binary classification problems.</p>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>The key assumptions of logistic regression include: - A linear relationship between the log odds of the dependent variable and the independent variables. - No multicollinearity among independent variables. - Independent variables are measured accurately and without error.</p>
+</div>
+<div class="section level2">
+<h2 id="interpretation-of-results">Interpretation of Results<a class="anchor" aria-label="anchor" href="#interpretation-of-results"></a>
+</h2>
+<p>In logistic regression, the coefficients represent the change in the log odds of the dependent variable for a one-unit change in the independent variable, while other variables are held constant.</p>
+<p>This information was created with the assistance of this <a href="https://chat.openai.com/share/a531ba79-9803-4e75-ae64-a4c2ca1eaa7f" class="external-link">link</a>.</p>
+</div>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
