@@ -1,0 +1,7 @@
+---
+output: github_document
+---
+
+# Add a title
+  
+Thsi package provide functions for Logistic Regression.
