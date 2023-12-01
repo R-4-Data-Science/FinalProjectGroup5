@@ -59,12 +59,6 @@ In logistic regression, the coefficients represent the change in the log
 odds of the dependent variable for a one-unit change in the independent
 variable, while other variables are held constant.
 
-<figure>
-<img
-src="/Users/mohammadmaydanchi/Library/CloudStorage/OneDrive-AuburnUniversity/Auburn%20University/2023-Fall/4-R%20for%20Data%20Science/5-Project/1-Main/1_klFuUpBGVAjTfpTak2HhUA.png"
-alt="“Logistic Regression Figure”" />
-<figcaption aria-hidden="true">“Logistic Regression Figure”</figcaption>
-</figure>
 
 This information was created with the assistance of this
 [link](https://chat.openai.com/share/a531ba79-9803-4e75-ae64-a4c2ca1eaa7f).
