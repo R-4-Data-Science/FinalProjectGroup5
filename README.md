@@ -63,5 +63,3 @@ variable, while other variables are held constant.
 This information was created with the assistance of this
 [link](https://chat.openai.com/share/a531ba79-9803-4e75-ae64-a4c2ca1eaa7f).
 
-The reference of the figure is in this
-[link](https://medium.com/analytics-vidhya/the-math-behind-logistic-regression-c2f04ca27bca).
